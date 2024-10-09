@@ -1,0 +1,97 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+
+class Card {
+    private String suit;
+    private String rank;
+
+    public Card(String suit, String rank) {
+        this.suit = suit;
+        this.rank = rank;
+    }
+
+    @Override
+    public String toString() {
+        return rank + " of " + suit;
+    }
+}
+
+class Deck {
+    private List<Card> cards;
+
+    public Deck() {
+        cards = new ArrayList<>();
+        String[] suits = {"Hearts", "Diamonds", "Clubs", "Spades"};
+        String[] ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"};
+
+        for (String suit : suits) {
+            for (String rank : ranks) {
+                cards.add(new Card(suit, rank));
+            }
+        }
+    }
+
+    public void shuffle() {
+        Collections.shuffle(cards);
+    }
+
+    public Card drawCard() {
+        if (cards.isEmpty()) {
+            return null;
+        }
+        return cards.remove(cards.size() - 1);
+    }
+
+    public void sort() {
+        cards.sort((card1, card2) -> {
+            int rankComparison = Integer.compare(getRankValue(card1.rank), getRankValue(card2.rank));
+            if (rankComparison == 0) {
+                return card1.suit.compareTo(card2.suit);
+            }
+            return rankComparison;
+        });
+    }
+
+    private int getRankValue(String rank) {
+        switch (rank) {
+            case "2": return 2;
+            case "3": return 3;
+            case "4": return 4;
+            case "5": return 5;
+            case "6": return 6;
+            case "7": return 7;
+            case "8": return 8;
+            case "9": return 9;
+            case "10": return 10;
+            case "Jack": return 11;
+            case "Queen": return 12;
+            case "King": return 13;
+            case "Ace": return 14;
+            default: return 0;
+        }
+    }
+
+    public List<Card> getCards() {
+        return cards;
+    }
+}
+
+public class CardGame {
+    public static void main(String[] args) {
+        Deck deck = new Deck();
+        deck.shuffle();
+
+        System.out.println("Drawing 5 cards:");
+        for (int i = 0; i < 5; i++) {
+            System.out.println(deck.drawCard());
+        }
+
+        System.out.println("\nRemaining cards in the deck:");
+        deck.sort();
+        for (Card card : deck.getCards()) {
+            System.out.println(card);
+        }
+    }
+}
